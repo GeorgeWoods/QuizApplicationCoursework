@@ -34,14 +34,14 @@ public class Main extends Application {
         Label label = new Label();
         label.setText("Enter username:");
         label.setPrefSize(200, 30);
-        label.setLayoutX(900);
+        label.setLayoutX(815);
         label.setLayoutY(90);
         root.getChildren().add(label);
 
 
         TextField text = new TextField();
         text.setPrefSize(200, 30);
-        text.setLayoutX(900);
+        text.setLayoutX(815);
         text.setLayoutY(120);
         root.getChildren().add(text);
 
