@@ -1,5 +1,7 @@
 package Coursework;
 
+import Coursework.Model.Answers;
+import Coursework.Model.DatabaseConnection;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -11,6 +13,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import javax.xml.crypto.Data;
+import java.util.ArrayList;
 import java.util.Optional;
 
 
@@ -23,6 +27,7 @@ public class Main extends Application {
     }
 
     PAGES currentPage = PAGES.HOME;
+    DatabaseConnection databaseConnection = new DatabaseConnection("QuizApplication.db");
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -94,10 +99,19 @@ public class Main extends Application {
         //center.getChildren(btnQuiz1, btnQuiz2, btnQuiz3);
 
 
-
         stage.setOnCloseRequest((WindowEvent we) -> exitPrompt(we));
 
         stage.show();
+
+        ArrayList<Answers> list = new ArrayList<>();
+        Answers.selectAll(list, databaseConnection);
+
+        for(Answers myNig : list) {
+            System.out.println(myNig);
+        }
+
+        Answers test = Answers.selectById(1, databaseConnection);
+        System.out.println(test);
     }
 
     public static void exitPrompt(WindowEvent we) {

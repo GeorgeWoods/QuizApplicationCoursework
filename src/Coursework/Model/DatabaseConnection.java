@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 
 public class DatabaseConnection {
 
-    private Connection connection = null;
+    public Connection connection = null;
 
     public DatabaseConnection(String dbFile)  {
         try {
@@ -60,6 +60,5 @@ public class DatabaseConnection {
             System.out.println("Database disconnection error: " + exception.getMessage());
         }
     }
-
 }
 
