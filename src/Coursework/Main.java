@@ -2,6 +2,7 @@ package Coursework;
 
 import Coursework.Model.Answers;
 import Coursework.Model.DatabaseConnection;
+import Coursework.Model.QuestionsService;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 public class Main extends Application {
 
+    Stage stage;
     String username = "";
 
     enum PAGES {
@@ -31,6 +33,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        QuestionsService.setDatabaseConnection(databaseConnection);
+
         Pane root = new Pane();
         stage.getIcons().add(new Image("Coursework/Resources/unnamed.png"));
 
@@ -112,6 +116,8 @@ public class Main extends Application {
 
         Answers test = Answers.selectById(1, databaseConnection);
         System.out.println(test);
+
+        this.stage = stage;
     }
 
     public static void exitPrompt(WindowEvent we) {
@@ -137,6 +143,8 @@ public class Main extends Application {
 
     public void clickQuiz1(ActionEvent ae) {
         System.out.println("Click Quiz 1");
+        Quiz quiz = new Quiz();
+        stage.setScene(quiz.getScene());
     }
 
     public void clickQuiz2(ActionEvent ae) {
