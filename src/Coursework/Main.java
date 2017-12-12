@@ -21,8 +21,9 @@ import java.util.Optional;
 
 public class Main extends Application {
 
-    Stage stage;
-    String username = "";
+    static Stage stage;
+    static Scene scene;
+    static String username = "";
 
     enum PAGES {
         HOME,
@@ -38,7 +39,7 @@ public class Main extends Application {
         Pane root = new Pane();
         stage.getIcons().add(new Image("Coursework/Resources/unnamed.png"));
 
-        Scene scene = new Scene(root, 1024, 768);
+        scene = new Scene(root, 1024, 768);
         scene.getStylesheets().add(getClass().getResource("Resources/app.css").toExternalForm());
 
         stage.setTitle("Quizzy McQuiz Face");
@@ -135,15 +136,13 @@ public class Main extends Application {
 
     }
 
-    public void goToHome(ActionEvent ae) {
-        if (currentPage == PAGES.HOME) {
-//            return;
-        }
+    public static void goToHome(ActionEvent ae) {
+        stage.setScene(scene);
     }
 
     public void clickQuiz1(ActionEvent ae) {
         System.out.println("Click Quiz 1");
-        Quiz quiz = new Quiz();
+        Quiz quiz = new Quiz(1);
         stage.setScene(quiz.getScene());
     }
 

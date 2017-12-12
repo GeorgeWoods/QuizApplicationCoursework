@@ -3,6 +3,7 @@ package Coursework;
 import Coursework.Model.Answers;
 import Coursework.Model.Questions;
 import Coursework.Model.QuestionsService;
+import javafx.event.ActionEvent;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,8 +17,10 @@ import java.util.ArrayList;
 
 public class Quiz {
 
-    String[] questions = { "This is a very good question yes men?", "Yes?" };
-    String[][] answers = { {"It's good", "Yeah I guess so", "Okay mate", "Suicide is inevitable"}, {"1", "2", "3", "4"} };
+    //String[] questions = { "This is a very good question yes men?", "Yes?" };
+    //String[][] answers = { {"It's good", "Yeah I guess so", "Okay mate", "Suicide is inevitable"}, {"1", "2", "3", "4"} };
+    ArrayList<Questions> questions = new ArrayList<>();
+    ArrayList<Answers[]> answers = new ArrayList<>();
 
     Label lblQuestion;
     Label lblQuestionIndex;
@@ -31,11 +34,35 @@ public class Quiz {
     Button answer3;
     Button answer4;
 
-    public Quiz() {
+    public Quiz(int QuizID) {
         Pane root = new Pane();
+
+        QuestionsService.selectQuizById(QuizID, answers, questions);
 
         this.scene = new Scene(root, 1024, 768);
         this.scene.getStylesheets().add(getClass().getResource("Resources/app.css").toExternalForm());
+
+        Button home = new Button("Home");
+        home.setPrefSize(200, 60);
+        home.setOnAction((ActionEvent ae) -> goToHome(ae));
+        root.getChildren().add(home);
+        home.setLayoutX(815);
+        home.setLayoutY(20);
+        home.setId("button");
+
+        Label label = new Label();
+        label.setText("Username:");
+        label.setPrefSize(200, 30);
+        label.setLayoutX(815);
+        label.setLayoutY(90);
+        root.getChildren().add(label);
+
+        Label lblUsername = new Label();
+        lblUsername.setText(Main.username);
+        lblUsername.setLayoutX(815);
+        lblUsername.setLayoutY(120);
+        lblUsername.setFont(new Font(25.0));
+        root.getChildren().add(lblUsername);
 
         lblQuestionIndex = new Label();
         lblQuestionIndex.setLayoutX(30);
@@ -97,35 +124,41 @@ public class Quiz {
         root.getChildren().add(answer4);
 
         setQuestion(0);
+    }
 
-        ArrayList<Questions> x = new ArrayList<>();
-        ArrayList<Answers> y = new ArrayList<>();
-        QuestionsService.selectQuizById(1, x, y);
+    public static void goToHome(ActionEvent ae) {
+        Main.goToHome(ae);
     }
 
     void setAnswer(int answerIndex) {
         theirAnswers.add(answerIndex);
         questionIndex += 1;
 
-        if (questionIndex == questions.length) {
+        System.out.println(questionIndex);
+        if (questionIndex >= questions.size()) {
             System.out.println("The quiz is over");
             // logic to write when the quiz is over
+        } else {
+            setQuestion(questionIndex);
         }
-
-        setQuestion(questionIndex);
     }
 
     void setQuestion(int questionIndex) {
         lblQuestionIndex.setText("Question #" + String.valueOf(questionIndex + 1));
-        lblQuestion.setText(questions[questionIndex]);
+
+        Questions question = questions.get(questionIndex);
+        lblQuestion.setText(question.getQuestion());
+
         populateAnswers(questionIndex);
     }
 
     void populateAnswers(int questionIndex) {
-        answer1.setText(answers[questionIndex][0]);
-        answer2.setText(answers[questionIndex][1]);
-        answer3.setText(answers[questionIndex][2]);
-        answer4.setText(answers[questionIndex][3]);
+        Answers[] answerArray = answers.get(questionIndex);
+
+        answer1.setText(answerArray[0].getAnswer());
+        answer2.setText(answerArray[0].getAnswer());
+        answer3.setText(answerArray[0].getAnswer());
+        answer4.setText(answerArray[0].getAnswer());
     }
 
     Scene getScene() {
