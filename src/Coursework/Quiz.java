@@ -8,12 +8,15 @@ import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Quiz {
 
@@ -33,6 +36,12 @@ public class Quiz {
     Button answer2;
     Button answer3;
     Button answer4;
+    ProgressBar progressBar;
+
+    long timeStart = 0;
+    long timeEnd = 0;
+
+    Timer timer;
 
     public Quiz(int QuizID) {
         Pane root = new Pane();
@@ -123,8 +132,17 @@ public class Quiz {
         });
         root.getChildren().add(answer4);
 
+        progressBar = new ProgressBar();
+        progressBar.setPrefSize(600, 50);
+        progressBar.setProgress(0.5);
+        progressBar.setLayoutX(30);
+        progressBar.setLayoutY(360);
+        root.getChildren().add(progressBar);
+
         setQuestion(0);
     }
+
+
 
     public static void goToHome(ActionEvent ae) {
         Main.goToHome(ae);
@@ -149,16 +167,39 @@ public class Quiz {
         Questions question = questions.get(questionIndex);
         lblQuestion.setText(question.getQuestion());
 
+        timeStart = System.currentTimeMillis();
+        timeEnd = System.currentTimeMillis() + (1000 * 10);
+
         populateAnswers(questionIndex);
+
+        if (timer != null) {
+            timer.cancel();
+        }
+
+        timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                double timeLeft = timeEnd - System.currentTimeMillis();
+
+                double percentage = 1 - (timeLeft / 10000);
+                progressBar.setProgress(percentage);
+
+//                if (timeLeft < 0) {
+//                    setAnswer(0);
+//                }
+            }
+        }, 0, 1);
     }
 
     void populateAnswers(int questionIndex) {
         Answers[] answerArray = answers.get(questionIndex);
 
         answer1.setText(answerArray[0].getAnswer());
-        answer2.setText(answerArray[0].getAnswer());
-        answer3.setText(answerArray[0].getAnswer());
-        answer4.setText(answerArray[0].getAnswer());
+        answer2.setText(answerArray[1].getAnswer());
+        answer3.setText(answerArray[2].getAnswer());
+        answer4.setText(answerArray[3].getAnswer());
     }
 
     Scene getScene() {
