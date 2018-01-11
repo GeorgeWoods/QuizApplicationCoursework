@@ -52,7 +52,7 @@ public class QuestionsService {
                 }
 
                 Answers[] answersArray = answers.get(questionId - 1);
-                answersArray[answerId - 1] = new Answers(answerId, questionId, answer);
+                answersArray[answerId % 4] = new Answers(answerId, questionId, answer);
                 answers.set(questionId - 1, answersArray);
 
 

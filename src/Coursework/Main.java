@@ -111,9 +111,6 @@ public class Main extends Application {
         ArrayList<Answers> list = new ArrayList<>();
         Answers.selectAll(list, databaseConnection);
 
-        for(Answers myNig : list) {
-            System.out.println(myNig);
-        }
 
         Answers test = Answers.selectById(1, databaseConnection);
         System.out.println(test);
