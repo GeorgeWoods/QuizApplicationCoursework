@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -35,9 +36,10 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         QuestionsService.setDatabaseConnection(databaseConnection);
+        Image smiley = new Image("Coursework/Resources/unnamed.png");
 
         Pane root = new Pane();
-        stage.getIcons().add(new Image("Coursework/Resources/unnamed.png"));
+        stage.getIcons().add(smiley);
 
         scene = new Scene(root, 1024, 768);
         scene.getStylesheets().add(getClass().getResource("Resources/app.css").toExternalForm());
@@ -60,6 +62,13 @@ public class Main extends Application {
         label.setLayoutX(815);
         label.setLayoutY(90);
         root.getChildren().add(label);
+
+        ImageView iv = new ImageView(smiley);
+        iv.setFitWidth(150);
+        iv.setFitHeight(150);
+        iv.setX(30);
+        iv.setY(20);
+        root.getChildren().add(iv);
 
         TextField txtUsername = new TextField();
         txtUsername.setPrefSize(200, 30);
