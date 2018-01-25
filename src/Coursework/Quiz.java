@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,6 +25,7 @@ public class Quiz {
     //String[][] answers = { {"It's good", "Yeah I guess so", "Okay mate", "Suicide is inevitable"}, {"1", "2", "3", "4"} };
     ArrayList<Questions> questions = new ArrayList<>();
     ArrayList<Answers[]> answers = new ArrayList<>();
+    HashMap<Integer, Integer> questionsToAnswers;
 
     Label lblQuestion;
     Label lblQuestionIndex;
@@ -40,11 +42,14 @@ public class Quiz {
 
     long timeStart = 0;
     long timeEnd = 0;
+    int score = 0;
 
     Timer timer;
 
     public Quiz(int QuizID) {
         Pane root = new Pane();
+
+        questionsToAnswers = QuestionsService.getCorrectAnswer(QuizID);
 
         QuestionsService.selectQuizById(QuizID, answers, questions);
 
@@ -150,12 +155,21 @@ public class Quiz {
 
     void setAnswer(int answerIndex) {
         theirAnswers.add(answerIndex);
+
+        Questions question = questions.get(questionIndex);
+        Answers answer = answers.get(questionIndex)[answerIndex];
+        int correctAnswerId = questionsToAnswers.get(question.getQuestionID());
+        if (correctAnswerId == answer.getAnswerID()) {
+            score++;
+            System.out.println("Correct answer");
+        }
+
         questionIndex += 1;
 
         System.out.println(questionIndex);
         if (questionIndex >= questions.size()) {
             System.out.println("The quiz is over");
-            // logic to write when the quiz is over
+            new Score(score).displayScoreScene();
         } else {
             setQuestion(questionIndex);
         }

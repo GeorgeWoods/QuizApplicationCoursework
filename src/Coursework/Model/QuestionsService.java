@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class QuestionsService {
@@ -14,6 +15,37 @@ public class QuestionsService {
 
     public static void setDatabaseConnection(DatabaseConnection d) {
         database = d;
+    }
+
+    public static HashMap<Integer, Integer> getCorrectAnswer(int QuizID) {
+        HashMap<Integer, Integer> questionsToAnswers = new HashMap<>();
+
+        PreparedStatement statement = database.newStatement("SELECT * FROM Answers INNER JOIN Questions ON Questions.QuestionID = Answers.QuestionID WHERE Correct = 1 AND Questions.QuizID = ?");
+        try {
+            if (statement == null) {
+                System.out.println("Statement is null");
+                return questionsToAnswers;
+            }
+
+            statement.setInt(1, QuizID);
+
+            ResultSet results = database.executeQuery(statement);
+
+            if (results == null) {
+                System.out.println("Results is null");
+                return questionsToAnswers;
+            }
+
+
+            while (results.next()) {
+                int questionId = results.getInt("QuestionID");
+                int answerId = results.getInt("AnswerID");
+                questionsToAnswers.put(questionId, answerId);
+            }
+        } catch (SQLException resultsException) {
+            System.out.println("Database select all error: " + resultsException.getMessage());
+        }
+        return questionsToAnswers;
     }
 
     public static void selectQuizById(int QuizID, ArrayList<Answers[]> answers, ArrayList<Questions> questions) {
